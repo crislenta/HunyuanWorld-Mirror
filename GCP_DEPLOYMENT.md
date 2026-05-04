@@ -58,8 +58,9 @@ The deploy script supports these environment variables:
 | `CPU` | `8` | Cloud Run CPU allocation |
 | `MEMORY` | `32Gi` | Cloud Run memory allocation |
 | `TIMEOUT` | `3600` | Request timeout in seconds |
-| `MAX_INSTANCES` | `1` | Maximum service instances |
-| `MIN_INSTANCES` | `0` | Minimum warm service instances |
+| `MAX_INSTANCES` | `2` | Maximum service instances |
+| `MIN_INSTANCES` | `1` | Minimum warm service instances |
+| `CONCURRENCY` | `80` | Concurrent HTTP requests per instance |
 | `ALLOW_UNAUTHENTICATED` | `true` | Whether to expose the UI publicly |
 
 Example private deployment:
@@ -85,5 +86,6 @@ Open `http://localhost:8080`.
 
 - The model is large; CPU-only execution is not a practical deployment target.
 - `Dockerfile.gcp` uses CUDA-enabled PyTorch and gsplat wheels on top of a slim Python base image to keep the build independent from Ubuntu CUDA image package mirrors.
+- The UI skips rendered-video generation by default because `gsplat` video rendering requires CUDA kernels.
 - Cloud Run instances are ephemeral. Download generated results from the UI before replacing or scaling down the service.
 - If Hugging Face rate limits or private checkpoints are involved, deploy with appropriate environment variables or secret mounts for the Hugging Face cache/token.

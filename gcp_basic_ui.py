@@ -99,6 +99,7 @@ def run_hunyuan_world_mirror(
     edge_normal_threshold: float,
     edge_depth_threshold: float,
     apply_sky_mask: bool,
+    render_video: bool,
 ):
     job_dir, input_path, copied_paths = _copy_uploads(files or [])
     results_dir = job_dir / "results"
@@ -122,6 +123,8 @@ def run_hunyuan_world_mirror(
         "--edge_depth_threshold",
         str(float(edge_depth_threshold)),
     ]
+    if not render_video:
+        command.append("--skip_rendered")
     if apply_sky_mask:
         command.append("--apply_sky_mask")
 
@@ -179,6 +182,10 @@ with gr.Blocks(title="HunyuanWorld-Mirror Basic UI") as demo:
             edge_normal_threshold = gr.Slider(0, 30, value=5, step=0.5, label="Normal edge threshold")
             edge_depth_threshold = gr.Slider(0, 0.2, value=0.03, step=0.005, label="Depth edge threshold")
             apply_sky_mask = gr.Checkbox(value=False, label="Apply sky mask")
+            render_video = gr.Checkbox(
+                value=os.environ.get("HWM_RENDER_VIDEO", "false").lower() == "true",
+                label="Render camera path video (requires CUDA)",
+            )
             run_button = gr.Button("Run reconstruction", variant="primary")
 
         with gr.Column(scale=2):
@@ -203,6 +210,7 @@ with gr.Blocks(title="HunyuanWorld-Mirror Basic UI") as demo:
             edge_normal_threshold,
             edge_depth_threshold,
             apply_sky_mask,
+            render_video,
         ],
         outputs=[status, uploaded_gallery, depth_gallery, normal_gallery, rendered_video, downloads],
     )

@@ -131,12 +131,15 @@ def main():
     parser.add_argument("--save_normal", action="store_true", default=True, help="Save normal PNG")
     parser.add_argument("--save_gs", action="store_true", default=True, help="Save Gaussians PLY")
     parser.add_argument("--save_rendered", action="store_true", default=True, help="Save rendered video")
+    parser.add_argument("--skip_rendered", action="store_true", help="Skip rendered video generation")
     parser.add_argument("--save_colmap", action="store_true", default=True, help="Save COLMAP sparse")
     # Conditioning flags
     parser.add_argument("--cond_pose", action="store_true", help="Use camera pose conditioning if available")
     parser.add_argument("--cond_intrinsics", action="store_true", help="Use intrinsics conditioning if available")
     parser.add_argument("--cond_depth", action="store_true", help="Use depth conditioning if available")
     args = parser.parse_args()
+    if args.skip_rendered:
+        args.save_rendered = False
 
     # Print inference parameters
     print(f"🔧 Configuration:")
