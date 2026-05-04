@@ -9,18 +9,26 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TORCH_HOME=/models/torch \
     PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    ffmpeg \
-    git \
-    libgl1 \
-    libglib2.0-0 \
-    libgomp1 \
-    python3.10 \
-    python3-pip \
-    python3.10-dev \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+    for attempt in 1 2 3 4 5; do \
+        rm -rf /var/lib/apt/lists/*; \
+        if apt-get update -o Acquire::Retries=5 && apt-get install -y --no-install-recommends \
+            build-essential \
+            cmake \
+            ffmpeg \
+            git \
+            libgl1 \
+            libglib2.0-0 \
+            libgomp1 \
+            python3.10 \
+            python3-pip \
+            python3.10-dev; then \
+            rm -rf /var/lib/apt/lists/*; \
+            exit 0; \
+        fi; \
+        sleep "$((attempt * 20))"; \
+    done; \
+    exit 1
 
 WORKDIR /app
 

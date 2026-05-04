@@ -39,6 +39,7 @@ export SERVICE_NAME="hunyuan-world-mirror"
 ```
 
 The script creates an Artifact Registry repository if needed, builds `Dockerfile.gcp` with Cloud Build, and deploys the service to Cloud Run.
+The Docker build config includes apt retry settings because Ubuntu mirror indexes can occasionally be in sync during Cloud Build.
 
 ## Useful settings
 
