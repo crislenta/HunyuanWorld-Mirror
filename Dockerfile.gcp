@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+FROM python:3.10-slim-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
@@ -19,10 +19,7 @@ RUN set -eux; \
             git \
             libgl1 \
             libglib2.0-0 \
-            libgomp1 \
-            python3.10 \
-            python3-pip \
-            python3.10-dev; then \
+            libgomp1; then \
             rm -rf /var/lib/apt/lists/*; \
             exit 0; \
         fi; \
@@ -33,13 +30,13 @@ RUN set -eux; \
 WORKDIR /app
 
 COPY requirements.txt requirements_gcp.txt ./
-RUN python3.10 -m pip install --upgrade pip setuptools wheel \
-    && python3.10 -m pip install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu124 \
-    && python3.10 -m pip install -r requirements_gcp.txt \
-    && python3.10 -m pip install gsplat --index-url https://docs.gsplat.studio/whl/pt24cu124
+RUN python -m pip install --upgrade pip setuptools wheel \
+    && python -m pip install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu124 \
+    && python -m pip install -r requirements_gcp.txt \
+    && python -m pip install gsplat --index-url https://docs.gsplat.studio/whl/pt24cu124
 
 COPY . .
 
 EXPOSE 8080
 
-CMD ["python3.10", "gcp_basic_ui.py"]
+CMD ["python", "gcp_basic_ui.py"]

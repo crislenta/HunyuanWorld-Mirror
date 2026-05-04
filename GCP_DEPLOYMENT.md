@@ -84,5 +84,6 @@ Open `http://localhost:8080`.
 ## Notes
 
 - The model is large; CPU-only execution is not a practical deployment target.
+- `Dockerfile.gcp` uses CUDA-enabled PyTorch and gsplat wheels on top of a slim Python base image to keep the build independent from Ubuntu CUDA image package mirrors.
 - Cloud Run instances are ephemeral. Download generated results from the UI before replacing or scaling down the service.
 - If Hugging Face rate limits or private checkpoints are involved, deploy with appropriate environment variables or secret mounts for the Hugging Face cache/token.
