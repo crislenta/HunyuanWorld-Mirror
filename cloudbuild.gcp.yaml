@@ -1,0 +1,20 @@
+substitutions:
+  _REGION: us-central1
+  _REPOSITORY: hunyuan-world-mirror
+  _IMAGE_NAME: hunyuan-world-mirror-ui
+  _IMAGE_TAG: latest
+
+timeout: 7200s
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --file
+      - Dockerfile.gcp
+      - --tag
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}
+      - .
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:${_IMAGE_TAG}

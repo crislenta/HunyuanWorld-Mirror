@@ -1,0 +1,10 @@
+.git
+.gradio
+__pycache__/
+*.py[cod]
+inference_output/
+logs/
+skyseg.onnx
+*.ckpt
+*.safetensors
+submodules/gsplat/examples/pycolmap/
